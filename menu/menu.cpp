@@ -54,7 +54,7 @@ void TitleMenu::Render(Game* game, Bitmap* target) {
 		break;
 	}
 	
-	target->RenderText("Copyright (c) 2015 - Ojima", 2, target->height - 10, 0x303030);
+	target->RenderText("Copyright (c) 2015-2016 - Ojima", 2, target->height - 10, 0x303030);
 }
 
 void TitleMenu::Tick(Game* game, bool up, bool down, bool left, bool right, bool enter) {

@@ -9,7 +9,6 @@ class Game;
 
 class Display : public Bitmap {
 	private:
-		Bitmap* test;
 		Bitmap3D* viewport;
 		
 	public:
