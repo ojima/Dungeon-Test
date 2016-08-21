@@ -49,6 +49,9 @@ class Emitter {
 		double x, y, z;
 		double dx, dy, dz;
 		
+		double vx, vy, vz;
+		double dvx, dvy, dvz;
+		
 		int tex;
 		unsigned int col;
 		
@@ -63,6 +66,18 @@ class Emitter {
 			this->dx = dx;
 			this->dy = dy;
 			this->dz = dz;
+		}
+		
+		inline void SetVelInitial(double vx, double vy, double vz) {
+			this->vx = vx;
+			this->vy = vy;
+			this->vz = vz;
+		}
+		
+		inline void SetVelSpread(double dvx, double dvy, double dvz) {
+			this->dvx = dvx;
+			this->dvy = dvy;
+			this->dvz = dvz;
 		}
 		
 		inline void SetMassSpread(double mass, double dmass) {

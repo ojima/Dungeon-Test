@@ -49,15 +49,15 @@ Particle::~Particle() {
 void Particle::Tick() {
 	if (life > 0) life--;
 	
-	x += xa;
-	y += ya;
-	z += za;
+	x += xa * 0.03;
+	y += ya * 0.03;
+	z += za * 0.03;
 	
-	ya -= 0.1 * mass;
-	if (y < 0.0) {
-		y = 0.0;
+	za += 0.1 * mass;
+	if (z > 0.0) {
+		z = 0.0;
 		xa *= 0.8;
-		za *= 0.8;
+		ya *= 0.8;
 	}
 }
 
@@ -114,6 +114,10 @@ void Emitter::Tick() {
 		
 		Particle* particle = new Particle(xx, yy, zz);
 		
+		particle->xa = vx + dvx * gaussian();
+		particle->ya = vy + dvy * gaussian();
+		particle->za = vz + dvz * gaussian();
+		
 		particle->tex = tex;
 		particle->col = col;
 		
@@ -129,7 +133,7 @@ void Emitter::Tick() {
 		Particle* particle = *i;
 		particle->Tick();
 		
-		if (!particle->life) {
+		if (particle->life <= 0) {
 			particles.erase(i);
 			delete particle;
 			i--;

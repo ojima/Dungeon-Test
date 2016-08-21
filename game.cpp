@@ -46,6 +46,6 @@ void Game::NewGame() {
 	level->AddEntity(player);
 	
 	player->x = level->xSpawn + 0.5;
-	player->z = level->ySpawn + 0.5;
+	player->y = level->ySpawn + 0.5;
 	player->rot = 0.5;
 }

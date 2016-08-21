@@ -51,11 +51,12 @@ bool BrokenBlock::use() {
 	this->isSolid = false;
 	this->renderSolid = false;
 	
-	Emitter* emitter = new Emitter(EMITTER_BURST, x + 0.5, y + 0.5, 0.5, 0, col);
-	emitter->SetPosSpread(0.2, 0.2, 0.2);
+	Emitter* emitter = new Emitter(EMITTER_BURST, x, y, -0.5, 0, col);
+	emitter->SetPosSpread(0.3, 0.3, 0.2);
+	emitter->SetVelSpread(0.1, 0.1, 0.2);
 	emitter->SetMassSpread(1.0, 0.2);
 	emitter->SetCountSpread(30, 10);
-	emitter->SetLifespanSpread(60, 30);
+	emitter->SetLifespanSpread(60, 10);
 	emitter->Emit();
 	
 	level->AddEmitter(emitter);

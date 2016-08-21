@@ -18,31 +18,31 @@ void Player::Tick(bool up, bool down, bool left, bool right, bool turnLeft, bool
 	if (turnLeft) rota += rotSpeed;
 	if (turnRight) rota -= rotSpeed;
 	
-	double xm = 0, zm = 0;
-	if (up) zm--;
-	if (down) zm++;
+	double xm = 0, ym = 0;
+	if (up) ym--;
+	if (down) ym++;
 	if (left) xm--;
 	if (right) xm++;
 	
-	double dd = xm * xm + zm * zm;
+	double dd = xm * xm + ym * ym;
 	if (dd > 0) dd = sqrt(dd);
 	else dd = 1;
 	
 	xm /= dd;
-	zm /= dd;
+	ym /= dd;
 	
-	bob = bob * 0.6 + sqrt(xm * xm + zm * zm);
+	bob = bob * 0.6 + sqrt(xm * xm + ym * ym);
 	turnBob = turnBob * 0.8 + rota;
-	bobPhase = bobPhase + sqrt(xm * xm + zm * zm) * getWalkSpeed();
+	bobPhase = bobPhase + sqrt(xm * xm + ym * ym) * getWalkSpeed();
 	
-	xa -= walkSpeed * (xm * cos(rot) + zm * sin(rot));
-	za -= walkSpeed * (zm * cos(rot) - xm * sin(rot));
+	xa -= walkSpeed * (xm * cos(rot) + ym * sin(rot));
+	ya -= walkSpeed * (ym * cos(rot) - xm * sin(rot));
 	
 	Move();
 	
 	double f = getFriction();
 	xa *= f;
-	za *= f;
+	ya *= f;
 	rot += rota;
 	rota *= 0.4;
 }
@@ -54,7 +54,7 @@ void Player::Activate() {
 	
 	double range = 2.0;
 	double xa = range * sin(rot);
-	double za = range * cos(rot);
+	double ya = range * cos(rot);
 	
 	/*
 	int xc = (int) (x + 0.5);
@@ -67,10 +67,10 @@ void Player::Activate() {
 	int steps = 100;
 	for (int i = 0; i < steps; i++) {
 		double xx = x + xa * i / steps;
-		double zz = z + za * i / steps;
+		double yy = y + ya * i / steps;
 		
 		for (Entity* e : possibleHits) {
-			if (e->contains(xx, zz)) {
+			if (e->contains(xx, yy)) {
 				if (e->use(this)) {
 					return;
 				}
@@ -78,9 +78,9 @@ void Player::Activate() {
 		}
 		
 		int xt = (int) (xx + 0.5);
-		int zt = (int) (zz + 0.5);
-		if (xt != (int) (x + 0.5) || zt != (int) (z + 0.5)) {
-			Block* block = level->getBlock(xt, zt);
+		int yt = (int) (yy + 0.5);
+		if (xt != (int) (x + 0.5) || yt != (int) (y + 0.5)) {
+			Block* block = level->getBlock(xt, yt);
 			if (block != nullptr) {
 				if (block->use()) return;
 				if (block->blocks(this)) return;
