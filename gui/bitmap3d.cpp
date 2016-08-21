@@ -266,17 +266,17 @@ void Bitmap3D::RenderWall(double x1, double y1, double x2, double y2, int tex, i
 
 void Bitmap3D::RenderSprite(double x, double y, double z, int tex, int color) {
 	double xc = (x - xCam) * 2.0 - rSin * 0.2;
-	double yc = (y - zCam) * 2.0;
-	double zc = (z - yCam) * 2.0 - rCos * 0.2;
+	double yc = (y - yCam) * 2.0 - rCos * 0.2;
+	double zc = (z - zCam) * 2.0;
 	
-	double xx = xc * rCos - zc * rSin;
-	double yy = yc;
-	double zz = zc * rCos + xc * rSin;
+	double xx = xc * rCos - yc * rSin;
+	double yy = yc * rCos + xc * rSin;
+	double zz = zc;
 	
-	if (zz < 0.1) return;
+	if (yy < 0.1) return;
 	
-	double xPix = xCenter - (xx / zz * fov);
-	double yPix = (yy / zz * fov) + yCenter;
+	double xPix = xCenter - (xx / yy * fov);
+	double yPix = (zz / yy * fov) + yCenter;
 	
 	double xPix1 = xPix - height / zz;
 	double xPix2 = xPix + height / zz;
