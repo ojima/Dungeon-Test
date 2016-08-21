@@ -11,12 +11,12 @@ class Entity {
 		void Tick();
 	
 	public:
-		double x, z, rot;
-		double xa, za, rota;
+		double x, y, rot;
+		double xa, ya, rota;
 		double r = 0.4;
 		Level* level;
 		
-		bool contains(double xx, double zz);
+		bool contains(double xx, double yy);
 		bool use(Entity* source);
 		
 	protected:

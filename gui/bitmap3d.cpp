@@ -21,7 +21,7 @@ void Bitmap3D::Render(Game* game) {
 	rCos = cos(rot);
 	
 	xCam = game->player->x - 0.3 * rSin;
-	yCam = game->player->z - 0.3 * rCos;
+	yCam = game->player->y - 0.3 * rCos;
 	zCam = -0.2 + sin(game->player->bobPhase * 0.4) * 0.02 * game->player->bob;
 	
 	xCenter = width / 2.0;
@@ -31,14 +31,14 @@ void Bitmap3D::Render(Game* game) {
 	Level* level = game->level;
 	
 	int xo = floor(xCam);
-	int zo = floor(yCam);
+	int yo = floor(yCam);
 	int r = 6;
 	
 	for (int xb = xo - r; xb <= xo + r; xb++) {
-		for (int zb = zo - r; zb <= zo + r; zb++) {
-			Block* c = level->getBlock(xb, zb);
-			Block* e = level->getBlock(xb + 1, zb);
-			Block* s = level->getBlock(xb, zb + 1);
+		for (int yb = yo - r; yb <= yo + r; yb++) {
+			Block* c = level->getBlock(xb, yb);
+			Block* e = level->getBlock(xb + 1, yb);
+			Block* s = level->getBlock(xb, yb + 1);
 			
 			if (c == nullptr) continue;
 			
@@ -47,31 +47,31 @@ void Bitmap3D::Render(Game* game) {
 				double openness = 1.0 - d->openness * 7.0 / 8.0;
 				
 				if (e->renderSolid) {
-					RenderWall(xb + openness, zb + 0.5 - rr, xb, zb + 0.5 - rr, c->tex, (c->col & 0xfefefe) >> 1, 0, openness);
-					RenderWall(xb, zb + 0.5 + rr, xb + openness, zb + 0.5 + rr, c->tex, (c->col & 0xfefefe) >> 1, openness, 0);
-					RenderWall(xb + openness, zb + 0.5 + rr, xb + openness, zb + 0.5 - rr, c->tex, c->col, 0.5 - rr, 0.5 + rr);
+					RenderWall(xb + openness, yb + 0.5 - rr, xb, yb + 0.5 - rr, c->tex, (c->col & 0xfefefe) >> 1, 0, openness);
+					RenderWall(xb, yb + 0.5 + rr, xb + openness, yb + 0.5 + rr, c->tex, (c->col & 0xfefefe) >> 1, openness, 0);
+					RenderWall(xb + openness, yb + 0.5 + rr, xb + openness, yb + 0.5 - rr, c->tex, c->col, 0.5 - rr, 0.5 + rr);
 				} else {
-					RenderWall(xb + 0.5 - rr, zb, xb + 0.5 - rr, zb + openness, c->tex, c->col, openness, 0);
-					RenderWall(xb + 0.5 + rr, zb + openness, xb + 0.5 + rr, zb, c->tex, c->col, 0, openness);
-					RenderWall(xb + 0.5 - rr, zb + openness, xb + 0.5 + rr, zb + openness, c->tex, (c->col & 0xfefefe) >> 1, 0.5 - rr, 0.5 + rr);
+					RenderWall(xb + 0.5 - rr, yb, xb + 0.5 - rr, yb + openness, c->tex, c->col, openness, 0);
+					RenderWall(xb + 0.5 + rr, yb + openness, xb + 0.5 + rr, yb, c->tex, c->col, 0, openness);
+					RenderWall(xb + 0.5 - rr, yb + openness, xb + 0.5 + rr, yb + openness, c->tex, (c->col & 0xfefefe) >> 1, 0.5 - rr, 0.5 + rr);
 				}
 			}
 			
 			if (c->renderSolid) {
 				if (!e->renderSolid) {
-					RenderWall(xb + 1, zb + 1, xb + 1, zb, c->tex, c->col);
+					RenderWall(xb + 1, yb + 1, xb + 1, yb, c->tex, c->col);
 				}
 				
 				if (!s->renderSolid) {
-					RenderWall(xb, zb + 1, xb + 1, zb + 1, c->tex, (c->col & 0xfefefe) >> 1);
+					RenderWall(xb, yb + 1, xb + 1, yb + 1, c->tex, (c->col & 0xfefefe) >> 1);
 				}
 			} else {
 				if (e->renderSolid) {
-					RenderWall(xb + 1, zb, xb + 1, zb + 1, e->tex, e->col);
+					RenderWall(xb + 1, yb, xb + 1, yb + 1, e->tex, e->col);
 				}
 				
 				if (s->renderSolid) {
-					RenderWall(xb + 1, zb + 1, xb, zb + 1, s->tex, (s->col & 0xfefefe) >> 1);
+					RenderWall(xb + 1, yb + 1, xb, yb + 1, s->tex, (s->col & 0xfefefe) >> 1);
 				}
 			}
 		}
@@ -266,23 +266,23 @@ void Bitmap3D::RenderWall(double x1, double y1, double x2, double y2, int tex, i
 
 void Bitmap3D::RenderSprite(double x, double y, double z, int tex, int color) {
 	double xc = (x - xCam) * 2.0 - rSin * 0.2;
-	double yc = (y - zCam) * 2.0;
-	double zc = (z - yCam) * 2.0 - rCos * 0.2;
+	double yc = (y - yCam) * 2.0 - rCos * 0.2;
+	double zc = (z - zCam) * 2.0;
 	
-	double xx = xc * rCos - zc * rSin;
-	double yy = yc;
-	double zz = zc * rCos + xc * rSin;
+	double xx = xc * rCos - yc * rSin;
+	double yy = yc * rCos + xc * rSin;
+	double zz = zc;
 	
-	if (zz < 0.1) return;
+	if (yy < 0.1) return;
 	
-	double xPix = xCenter - (xx / zz * fov);
-	double yPix = (yy / zz * fov) + yCenter;
+	double xPix = xCenter - (xx / yy * fov);
+	double yPix = (zz / yy * fov) + yCenter;
 	
-	double xPix1 = xPix - height / zz;
-	double xPix2 = xPix + height / zz;
+	double xPix1 = xPix - height / yy;
+	double xPix2 = xPix + height / yy;
 	
-	double yPix1 = yPix - height / zz;
-	double yPix2 = yPix + height / zz;
+	double yPix1 = yPix - height / yy;
+	double yPix2 = yPix + height / yy;
 	
 	int xp1 = (int) ceil(xPix1);
 	int xp2 = (int) ceil(xPix2);
@@ -294,7 +294,7 @@ void Bitmap3D::RenderSprite(double x, double y, double z, int tex, int color) {
 	if (yp1 < 0) yp1 = 0;
 	if (yp2 > height) yp2 = height;
 	
-	zz *= 4;
+	yy *= 4.0;
 	
 	for (int xp = xp1; xp < xp2; xp++) {
 		double xpr = (xp - xPix1) / (xPix2 - xPix1);
@@ -304,14 +304,14 @@ void Bitmap3D::RenderSprite(double x, double y, double z, int tex, int color) {
 			double ypr = (yp - yPix1) / (yPix2 - yPix1);
 			int yt = (int) (ypr * 32);
 			
-			if (zBuffer[xp + yp * width] > zz) {
+			if (zBuffer[xp + yp * width] > yy) {
 				int xTex = xt + (tex % 8) * 32;
 				int yTex = yt + (tex / 8) * 32;
 				
 				unsigned int pix = SpriteTex->pixels[xTex + yTex * SpriteTex->width];
 				if (pix & 0xff000000) {
 					pixels[xp + yp * width] = MixColors(pix, color);
-					zBuffer[xp + yp * width] = zz;
+					zBuffer[xp + yp * width] = yy;
 				}
 			}
 		}
