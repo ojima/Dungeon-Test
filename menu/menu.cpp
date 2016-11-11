@@ -106,6 +106,10 @@ void TitleMenu::Tick(Game* game, bool up, bool down, bool left, bool right, bool
 						selected = 0;
 						submenu = 1;
 					break;
+					
+					case 4:
+						game->Quit();
+					break;
 				}
 			break;
 			

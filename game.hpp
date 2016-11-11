@@ -15,9 +15,11 @@ class Game {
 		Game();
 		~Game();
 		
+		
 		void Tick(const unsigned char* keys);
 		
 		void NewGame();
+		void Quit();
 		
 	public:
 		Level* level;
@@ -26,6 +28,7 @@ class Game {
 		
 		unsigned char volume, musicvolume;
 		bool retromode;
+		bool isRunning;
 };
 
 #endif // GAME_HPP

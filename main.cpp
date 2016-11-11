@@ -87,10 +87,9 @@ int main(int argc, char* argv[]) {
 	int frames = 0;
 	int lastTime = 0;
 	double silentTime = 0.0;
-	running = true;
 	
 	// Primary game loop heartbeat
-	while (running) {
+	while (game->isRunning) {
 		int nowTime = SDL_GetTicks();
 		int deltaTime = nowTime - lastTime;
 		lastTime = nowTime;
@@ -117,7 +116,7 @@ int main(int argc, char* argv[]) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
-				running = false;
+				game->Quit();
 			}
 		}
 		

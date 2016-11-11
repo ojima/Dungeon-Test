@@ -8,6 +8,8 @@ Game::Game() {
 	volume = 100;
 	musicvolume = 80;
 	retromode = false;
+	
+	isRunning = true;
 }
 
 Game::~Game() {
@@ -48,4 +50,8 @@ void Game::NewGame() {
 	player->x = level->xSpawn + 0.5;
 	player->y = level->ySpawn + 0.5;
 	player->rot = 0.5;
+}
+
+void Game::Quit() {
+	isRunning = false;
 }
